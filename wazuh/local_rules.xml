@@ -80,3 +80,24 @@
     </mitre>
   </rule>
 </group>
+
+<group name="sysmon,credential_access,">
+<rule id="100201" level="12">
+    <if_group>sysmon_event_10</if_group>
+    <field name="win.eventdata.targetImage" type="pcre2">(?i)lsass\.exe$</field>
+    <field name="win.eventdata.grantedAccess" type="pcre2">(?i)^(0x1010|0x1410|0x1438|0x143a|0x1fffff)$</field>
+    <description>Sysmon: wykryto podejrzany dostęp do pamięci procesu LSASS ($(win.eventdata.grantedAccess)) przez $(win.eventdata.sourceImage) na $(win.system.computer).</description>
+    <mitre>
+      <id>T1003.001</id>
+    </mitre>
+  </rule>
+
+  <rule id="100202" level="12">
+    <if_group>sysmon_event_11</if_group>
+    <field name="win.eventdata.targetFilename" type="pcre2">(?i)lsass.*\.dmp$</field>
+    <description>Sysmon: wykryto utworzenie pliku zrzutu pamięci LSASS ($(win.eventdata.targetFilename)) przez $(win.eventdata.image).</description>
+    <mitre>
+      <id>T1003.001</id>
+    </mitre>
+  </rule>
+</group>
